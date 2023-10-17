@@ -1,0 +1,36 @@
+
+using System;
+class HelloWorld
+{
+    static void Main()
+    {
+        double p = Math.PI;
+        double a = p/5, b = p, h = p/25;
+        double min = 0.0001;
+        double y;
+        double s = 0;
+
+        for (double x = a; x <= b; x += h)
+        {
+        
+            int i = 1;
+            while (true)
+            { 
+                double e = Math.Pow(-1, i) * Math.Cos(i * x) / Math.Pow(i, 2);
+                if (Math.Abs(e) < min) break;
+                else s += e;
+                i++;
+            }
+            y = (Math.Pow(x, 2) - (Math.Pow(p, 2) / 3)) / 4;
+            Console.WriteLine(s);
+            Console.WriteLine(y);
+            Console.WriteLine();
+            x += h;
+            s = 0;
+        }
+
+        Console.ReadKey();
+    }
+    
+
+}
