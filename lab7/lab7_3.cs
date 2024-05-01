@@ -78,30 +78,31 @@ public class ManTeam : Team
 }
 public class Tournament
 {
-    private List<Team> teams;
-
+    private List<Team> teams = new List<Team>();
+    
+    public void AddTeam(Team x) 
+    {
+        this.teams.Add(x);
+    }
     public void SimulateTournament()
     {
-        this.teams = new List<Team>();
-        this.teams.Add(new WomanTeam("Первая"));
-        this.teams.Add(new ManTeam("Вторая"));
-        this.teams.Add(new ManTeam("Третья"));
         Random r = new Random();
-
-
-        for (int i = 1; i <= 18;)
+        for (int i = 1; i <= this.teams.Count*6;)
         {
-            int random = r.Next(0, 3);
+            int random = r.Next(0, this.teams.Count);
             if (this.teams[random].Count < 6)
             {
                 this.teams[random].AddParticipant(i);
                 ++i;
             }
         }
+        Console.WriteLine(this.teams.Count);
+        Console.WriteLine("hh");
     }
     public Team GetWinner()
     {
         int winnerIndex = 0, winnerScore = 0;
+
         for (int i = 0; i < this.teams.Count; ++i)
         {
             if (winnerScore < this.teams[i].GetTeamScore())
@@ -118,10 +119,34 @@ public class Program
     public static void Main()
     {
         Console.WriteLine("bah?");
-        Tournament t = new Tournament();
-        t.SimulateTournament();
-        Console.WriteLine(String.Format("{0,20} {1,25} {2,10}", "Команда победитель", "Тип команды победителя:", "Счёт"));
-        Console.WriteLine(String.Format("{0,20} {1,25} {2,10}", t.GetWinner().Name, t.GetWinner().GetTeamType() , t.GetWinner().GetTeamScore()));
+        Tournament manTournament = new Tournament();
+        Tournament womanTournament = new Tournament();
+        
+        manTournament.AddTeam(new ManTeam("Первая"));
+        manTournament.AddTeam(new ManTeam("Вторая"));
+        manTournament.AddTeam(new ManTeam("Третья"));
+        
+        womanTournament.AddTeam(new WomanTeam("Первая"));
+        womanTournament.AddTeam(new WomanTeam("Вторая"));
+        womanTournament.AddTeam(new WomanTeam("Третья"));
+
+        manTournament.SimulateTournament();
+        womanTournament.SimulateTournament();
+
+        Console.WriteLine(String.Format("{0,20} {1,10}", "Команда победитель у мужчин", "Счёт"));
+        Console.WriteLine(String.Format("{0,20} {1,10}\n", manTournament.GetWinner().Name, manTournament.GetWinner().GetTeamScore()));
+
+        Console.WriteLine(String.Format("{0,20} {1,10}", "Команда победитель у женщин", "Счёт"));
+        Console.WriteLine(String.Format("{0,20} {1,10}\n\n", womanTournament.GetWinner().Name, womanTournament.GetWinner().GetTeamScore()));
+        
+        
+        Team absoluteWinner = manTournament.GetWinner();
+        if (womanTournament.GetWinner().GetTeamScore() > absoluteWinner.GetTeamScore()) 
+        {
+            absoluteWinner = womanTournament.GetWinner();
+        }
+        Console.WriteLine(String.Format("{0,20} {1,25} {2,10}", "Абсолютный победитель", "Тип команды", "Счёт"));
+        Console.WriteLine(String.Format("{0,20} {1,25} {2,10}", absoluteWinner.Name, absoluteWinner.GetTeamType(), absoluteWinner.GetTeamScore()));
 
     }
 }
